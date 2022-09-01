@@ -10,7 +10,8 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/SedoyDi/express-mesto-gha.git"  },
+    "url": "git+https://github.com/SedoyDi/express-mesto-gha.git"
+  },
   "keywords": [],
   "author": "Sedov D.S.",
   "license": "ISC",
