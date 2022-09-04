@@ -16,14 +16,12 @@ app.use((req, res, next) => {
   next();
 });
 
-
-
 app.use("/users", userRoutes);
 app.use("/cards", cardRoutes);
-app.use('/*', (req, res) => {
+app.use("/*", (req, res) => {
   res.status(404).send({
-    "message": "Страница не найдена"
-  } );
+    message: "Страница не найдена",
+  });
 });
 
 app.listen(PORT, () => {
