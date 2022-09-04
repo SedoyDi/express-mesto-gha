@@ -42,7 +42,7 @@ const createUser = (req, res) => {
     .then((user) => {
       res.send(user);
     })
-    .catch(() => {
+    .catch((err) => {
       if (err === "ValidationError") {
         res.status(INCORRECT_DATA).send({ message: "Некорректные данные" });
       } else {
