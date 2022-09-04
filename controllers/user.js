@@ -1,5 +1,4 @@
 const User = require("../models/user");
-const NotFoundErr = require("../errors/not_found_error_class");
 const getUsers = (req, res, next) => {
   User.find({})
     .then((users) => {
@@ -10,7 +9,7 @@ const getUsers = (req, res, next) => {
 
 const getUserById = (req, res, next) => {
   User.findById(req.params.userId)
-    .orFail(new NotFoundErr("Запрашиваемый пользователь не найден"))
+    .orFail()
     .then((user) => {
       res.send(user);
     })
