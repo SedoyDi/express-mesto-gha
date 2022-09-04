@@ -28,5 +28,29 @@ const createCard = (req, res, next) => {
     })
     .catch(next);
 };
+const addLike = (req, res, next) => {
+  Card.findByIdAndUpdate(
+    req.params.cardId,
+    { $addToSet: { likes: req.user._id } },
+    { new: true }
+  )
+    .populate("owner")
+    .then((card) => {
+      res.send(card);
+    })
+    .catch(next);
+};
 
-module.exports = { getCards, deleteCard, createCard };
+const deleteLike = (req, res, next) => {
+  Card.findByIdAndUpdate(
+    req.params.cardId,
+    { $pull: { likes: req.user._id } },
+    { new: true }
+  )
+    .populate("owner")
+    .then((card) => {
+      res.send(card);
+    })
+    .catch(next);
+};
+module.exports = { getCards, deleteCard, createCard, addLike, deleteLike };
