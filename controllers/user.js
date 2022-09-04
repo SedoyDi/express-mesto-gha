@@ -29,42 +29,64 @@ const getUserById = (req, res, ) => {
     });
 };
 
-const createUser = (req, res, next) => {
+const createUser = (req, res) => {
   const { name, about, avatar } = req.body;
 
   User.create({ name, about, avatar })
     .then((user) => {
       res.send(user);
     })
-    .catch(next);
+    .catch(()=>{
+      if (err === 'ValidationError') {
+        res.status(INCORRECT_DATA).send({ message: 'Некорректные данные' });
+      } else {
+        res.status(DEFAULT_ERROR).send({ message: 'Ошибка сервера' });
+      }
+    });
 };
 
-const patchProfile = (req, res, next) => {
-  const { name, about } = req.body;
+const patchProfile = (req, res) => {
+  const { name = false, about = false } = req.body;
 
-  User.findByIdAndUpdate(
-    req.user._id,
-    { name, about },
-    { new: true, runValidators: true }
-  )
-    .then((user) => {
-      res.send(user);
-    })
-    .catch(next);
+  if (name && about) {
+    User.findByIdAndUpdate(req.user._id, { name, about }, { new: true, runValidators: true })
+      .then((user) => {
+        res.send(user);
+      })
+      .catch(({ name: err }) => {
+        if (err === 'ValidationError') {
+          res.status(INCORRECT_DATA).send({ message: 'Некорректные данные' });
+        } if (err === 'CastError') {
+          res.status(NOT_FOUND).send({ message: 'Запрашиваемый пользователь не найден' });
+        } else {
+          res.status(DEFAULT_ERROR).send({ message: 'Ошибка сервера' });
+        }
+      });
+  } else {
+    res.status(INCORRECT_DATA).send({ message: 'Некорректные данные' });
+  }
 };
 
-const patchAvatar = (req, res, next) => {
-  const { avatar } = req.body;
+const patchAvatar = (req, res) => {
+  const { avatar = false } = req.body;
 
-  User.findByIdAndUpdate(
-    req.user._id,
-    { avatar },
-    { new: true, runValidators: true }
-  )
-    .then((user) => {
-      res.send(user);
-    })
-    .catch(next);
+  if (avatar) {
+    User.findByIdAndUpdate(req.user._id, { avatar }, { new: true, runValidators: true })
+      .then((user) => {
+        res.send(user);
+      })
+      .catch(({ name: err }) => {
+        if (err === 'ValidationError') {
+          res.status(INCORRECT_DATA).send({ message: 'Некорректные данные' });
+        } if (err === 'CastError') {
+          res.status(NOT_FOUND).send({ message: 'Запрашиваемый пользователь не найден' });
+        } else {
+          res.status(DEFAULT_ERROR).send({ message: 'Ошибка сервера' });
+        }
+      });
+  } else {
+    res.status(DATA_ERROR_CODE).send({ message: 'Некорректные данные' });
+  }
 };
 
 module.exports = {
