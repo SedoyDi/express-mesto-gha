@@ -1,19 +1,32 @@
 const User = require("../models/user");
-const getUsers = (req, res, next) => {
+const {DEFAULT_ERROR, NOT_FOUND, INCORRECT_DATA} = require("../errors/errors_code");
+
+const getUsers = (req, res) => {
   User.find({})
     .then((users) => {
       res.send(users);
     })
-    .catch(next);
+    .catch(()=>{
+      res.status(DEFAULT_ERROR).send({ message: 'Ошибка сервера' });
+    });
 };
 
-const getUserById = (req, res, next) => {
+const getUserById = (req, res, ) => {
   User.findById(req.params.userId)
-    .orFail()
     .then((user) => {
-      res.send(user);
+      if (user) {
+        res.send(user);
+      } else {
+        res.status(NOT_FOUND).send({ message: 'Запрашиваемый пользователь не найден' });
+      }
     })
-    .catch(next);
+    .catch(({ name }) => {
+      if (name === 'CastError') {
+        res.status(INCORRECT_DATA).send({ message: 'Некорректные данные' });
+      } else {
+        res.status(DEFAULT_ERROR).send({ message: 'Ошибка сервера' });
+      }
+    });
 };
 
 const createUser = (req, res, next) => {
