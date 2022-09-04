@@ -18,11 +18,13 @@ app.use((req, res, next) => {
 
 app.use("/users", userRoutes);
 app.use("/cards", cardRoutes);
-app.use("/*", (req, res,) => {
+
+app.use("/*", (req, res) => {
   res.status(404).send({
     message: "Страница не найдена",
   });
 });
+
 app.listen(PORT, () => {
   console.log(`Сервер запущен на ${PORT} порту`);
 });

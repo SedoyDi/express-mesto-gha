@@ -91,4 +91,11 @@ const deleteLike = (req, res) => {
       }
     });
 };
-module.exports = { getCards, deleteCard, createCard, addLike, deleteLike };
+
+module.exports = {
+  getCards,
+  deleteCard,
+  createCard,
+  addLike,
+  deleteLike,
+};
