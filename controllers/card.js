@@ -1,11 +1,15 @@
 const Card = require("../models/card");
+const {DEFAULT_ERROR, NOT_FOUND, INCORRECT_DATA} = require("../errors/errors_code");
 
-const getCards = (req, res, next) => {
+
+const getCards = (req, res) => {
   Card.find({})
     .then((cards) => {
       res.send(cards);
     })
-    .catch(next);
+    .catch(() => {
+      res.status(DEFAULT_ERROR).send({ message: 'Ошибка сервера' });
+    });
 };
 
 const deleteCard = (req, res, next) => {
