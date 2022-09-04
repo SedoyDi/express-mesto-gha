@@ -3,7 +3,6 @@ const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const userRoutes = require("./routes/user");
 const cardRoutes = require("./routes/card");
-const { errors } = require('celebrate');
 const { PORT = 3000 } = process.env;
 
 const app = express();
@@ -24,7 +23,6 @@ app.use("/*", (req, res,) => {
     message: "Страница не найдена",
   });
 });
-app.use(errors());
 app.listen(PORT, () => {
   console.log(`Сервер запущен на ${PORT} порту`);
 });
