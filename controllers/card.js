@@ -40,7 +40,7 @@ const createCard = (req, res) => {
 
   Card.create({ name, link, owner: req.user._id })
     .then((card) => {
-      res.status(CREATED_CODE).send(card, { massage: 'Карточка создана' });
+      res.status(CREATED_CODE).send(card);
     })
     .catch(({ name: err }) => {
       if (err === 'ValidationError') {
@@ -58,7 +58,7 @@ const addLike = (req, res) => {
   )
     .then((card) => {
       if (card) {
-        res.status(CREATED_CODE).send(card, { massage: 'Лайк добавлен' });
+        res.status(CREATED_CODE).send(card);
       } else {
         res.status(NOT_FOUND).send({ message: 'Карточка не найдена' });
       }
@@ -80,7 +80,7 @@ const deleteLike = (req, res) => {
   )
     .then((card) => {
       if (card) {
-        res.status(DEFAULT_OK_CODE).send(card, { massage: 'Лайк удалён' });
+        res.status(DEFAULT_OK_CODE).send(card);
       } else {
         res.status(NOT_FOUND).send({ message: 'Карточка не найдена' });
       }
