@@ -28,7 +28,7 @@ const getUserById = (req, res) => {
       }
     })
     .catch(({ name }) => {
-      if (name === 'CastError') {
+      if (name === 'ValidationError') {
         res.status(INCORRECT_DATA).send({ message: 'Некорректные данные' });
       } else {
         res.status(DEFAULT_ERROR).send({ message: 'Ошибка сервера' });
@@ -64,17 +64,17 @@ const patchProfile = (req, res) => {
       .then((user) => {
         res.send(user);
       })
+      // eslint-disable-next-line consistent-return
       .catch(({ name: err }) => {
         if (err === 'ValidationError') {
-          res.status(INCORRECT_DATA).send({ message: 'Некорректные данные' });
+          return res.status(INCORRECT_DATA).send({ message: 'Некорректные данные' });
         }
-        if (err === 'CastError') {
+        if (err === 'NotFoundError') {
           res
             .status(NOT_FOUND)
             .send({ message: 'Запрашиваемый пользователь не найден' });
-        } else {
-          res.status(DEFAULT_ERROR).send({ message: 'Ошибка сервера' });
         }
+        res.status(DEFAULT_ERROR).send({ message: 'Ошибка сервера' });
       });
   } else {
     res.status(INCORRECT_DATA).send({ message: 'Некорректные данные' });
@@ -93,11 +93,12 @@ const patchAvatar = (req, res) => {
       .then((user) => {
         res.send(user);
       })
+      // eslint-disable-next-line consistent-return
       .catch(({ name: err }) => {
         if (err === 'ValidationError') {
-          res.status(INCORRECT_DATA).send({ message: 'Некорректные данные' });
+          return res.status(INCORRECT_DATA).send({ message: 'Некорректные данные' });
         }
-        if (err === 'CastError') {
+        if (err === 'NotFoundError') {
           res
             .status(NOT_FOUND)
             .send({ message: 'Запрашиваемый пользователь не найден' });
