@@ -38,8 +38,8 @@ const createCard = (req, res) => {
   const { name, link } = req.body;
 
   Card.create({ name, link, owner: req.user._id })
-    .then(() => {
-      res.status(CREATED_CODE).send({ massage: 'Карточка создана' });
+    .then((card) => {
+      res.status(CREATED_CODE).send(card, { massage: 'Карточка создана' });
     })
     .catch(({ name: err }) => {
       if (err === 'ValidationError') {

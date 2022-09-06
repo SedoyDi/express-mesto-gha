@@ -40,8 +40,8 @@ const createUser = (req, res) => {
   const { name, about, avatar } = req.body;
 
   User.create({ name, about, avatar })
-    .then(() => {
-      res.status(CREATED_CODE).send({ massage: 'Пользователь создан' });
+    .then((user) => {
+      res.status(CREATED_CODE).send(user, { massage: 'Пользователь создан' });
     })
     .catch(({ name: err }) => {
       if (err === 'ValidationError') {
