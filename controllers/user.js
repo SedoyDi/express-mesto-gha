@@ -1,9 +1,9 @@
-const User = require("../models/user");
+const User = require('../models/user');
 const {
   DEFAULT_ERROR,
   NOT_FOUND,
   INCORRECT_DATA,
-} = require("../errors/errors_code");
+} = require('../errors/errors_code');
 
 const getUsers = (req, res) => {
   User.find({})
@@ -11,7 +11,7 @@ const getUsers = (req, res) => {
       res.send(users);
     })
     .catch(() => {
-      res.status(DEFAULT_ERROR).send({ message: "Ошибка сервера" });
+      res.status(DEFAULT_ERROR).send({ message: 'Ошибка сервера' });
     });
 };
 
@@ -23,14 +23,14 @@ const getUserById = (req, res) => {
       } else {
         res
           .status(NOT_FOUND)
-          .send({ message: "Запрашиваемый пользователь не найден" });
+          .send({ message: 'Запрашиваемый пользователь не найден' });
       }
     })
     .catch(({ name }) => {
-      if (name === "CastError") {
-        res.status(INCORRECT_DATA).send({ message: "Некорректные данные" });
+      if (name === 'CastError') {
+        res.status(INCORRECT_DATA).send({ message: 'Некорректные данные' });
       } else {
-        res.status(DEFAULT_ERROR).send({ message: "Ошибка сервера" });
+        res.status(DEFAULT_ERROR).send({ message: 'Ошибка сервера' });
       }
     });
 };
@@ -42,11 +42,11 @@ const createUser = (req, res) => {
     .then((user) => {
       res.send(user);
     })
-    .catch(({name: err}) => {
-      if (err === "ValidationError") {
-        res.status(INCORRECT_DATA).send({ message: "Некорректные данные" });
+    .catch(({ name: err }) => {
+      if (err === 'ValidationError') {
+        res.status(INCORRECT_DATA).send({ message: 'Некорректные данные' });
       } else {
-        res.status(DEFAULT_ERROR).send({ message: "Ошибка сервера" });
+        res.status(DEFAULT_ERROR).send({ message: 'Ошибка сервера' });
       }
     });
 };
@@ -58,25 +58,25 @@ const patchProfile = (req, res) => {
     User.findByIdAndUpdate(
       req.user._id,
       { name, about },
-      { new: true, runValidators: true }
+      { new: true, runValidators: true },
     )
       .then((user) => {
         res.send(user);
       })
       .catch(({ name: err }) => {
-        if (err === "ValidationError") {
-          res.status(INCORRECT_DATA).send({ message: "Некорректные данные" });
+        if (err === 'ValidationError') {
+          res.status(INCORRECT_DATA).send({ message: 'Некорректные данные' });
         }
-        if (err === "CastError") {
+        if (err === 'CastError') {
           res
             .status(NOT_FOUND)
-            .send({ message: "Запрашиваемый пользователь не найден" });
+            .send({ message: 'Запрашиваемый пользователь не найден' });
         } else {
-          res.status(DEFAULT_ERROR).send({ message: "Ошибка сервера" });
+          res.status(DEFAULT_ERROR).send({ message: 'Ошибка сервера' });
         }
       });
   } else {
-    res.status(INCORRECT_DATA).send({ message: "Некорректные данные" });
+    res.status(INCORRECT_DATA).send({ message: 'Некорректные данные' });
   }
 };
 
@@ -87,25 +87,26 @@ const patchAvatar = (req, res) => {
     User.findByIdAndUpdate(
       req.user._id,
       { avatar },
-      { new: true, runValidators: true }
+      { new: true, runValidators: true },
     )
       .then((user) => {
         res.send(user);
       })
       .catch(({ name: err }) => {
-        if (err === "ValidationError") {
-          res.status(INCORRECT_DATA).send({ message: "Некорректные данные" });
+        if (err === 'ValidationError') {
+          res.status(INCORRECT_DATA).send({ message: 'Некорректные данные' });
         }
-        if (err === "CastError") {
+        if (err === 'CastError') {
           res
             .status(NOT_FOUND)
-            .send({ message: "Запрашиваемый пользователь не найден" });
+            .send({ message: 'Запрашиваемый пользователь не найден' });
         } else {
-          res.status(DEFAULT_ERROR).send({ message: "Ошибка сервера" });
+          res.status(DEFAULT_ERROR).send({ message: 'Ошибка сервера' });
         }
       });
   } else {
-    res.status(DATA_ERROR_CODE).send({ message: "Некорректные данные" });
+    // eslint-disable-next-line no-undef
+    res.status(DATA_ERROR_CODE).send({ message: 'Некорректные данные' });
   }
 };
 
