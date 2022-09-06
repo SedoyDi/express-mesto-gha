@@ -4,7 +4,7 @@ const {
   NOT_FOUND,
   INCORRECT_DATA,
   CREATED_CODE,
-} = require('../errors/errors_code');
+} = require('../status/status_code');
 
 const getUsers = (req, res) => {
   User.find({})
@@ -28,7 +28,7 @@ const getUserById = (req, res) => {
       }
     })
     .catch(({ name }) => {
-      if (name === 'ValidationError') {
+      if (name === 'CastError') {
         res.status(INCORRECT_DATA).send({ message: 'Некорректные данные' });
       } else {
         res.status(DEFAULT_ERROR).send({ message: 'Ошибка сервера' });

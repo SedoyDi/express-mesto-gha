@@ -4,7 +4,8 @@ const {
   NOT_FOUND,
   INCORRECT_DATA,
   CREATED_CODE,
-} = require('../errors/errors_code');
+  DEFAULT_OK_CODE,
+} = require('../status/status_code');
 
 const getCards = (req, res) => {
   Card.find({})
@@ -57,7 +58,7 @@ const addLike = (req, res) => {
   )
     .then((card) => {
       if (card) {
-        res.send(card);
+        res.status(CREATED_CODE).send(card, { massage: 'Лайк добавлен' });
       } else {
         res.status(NOT_FOUND).send({ message: 'Карточка не найдена' });
       }
@@ -79,7 +80,7 @@ const deleteLike = (req, res) => {
   )
     .then((card) => {
       if (card) {
-        res.send(card);
+        res.status(DEFAULT_OK_CODE).send(card, { massage: 'Лайк удалён' });
       } else {
         res.status(NOT_FOUND).send({ message: 'Карточка не найдена' });
       }
