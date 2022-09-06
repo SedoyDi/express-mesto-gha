@@ -27,7 +27,7 @@ const deleteCard = (req, res) => {
       }
     })
     .catch(({ name }) => {
-      if (name === 'ValidationError') {
+      if (name === 'CastError') {
         res.status(INCORRECT_DATA).send({ message: 'Некорректные данные' });
       } else {
         res.status(DEFAULT_ERROR).send({ message: 'Ошибка сервера' });
@@ -64,7 +64,7 @@ const addLike = (req, res) => {
       }
     })
     .catch(({ name }) => {
-      if (name === 'ValidationError') {
+      if (name === 'CastError') {
         res.status(INCORRECT_DATA).send({ message: 'Некорректные данные' });
       } else {
         res.status(DEFAULT_ERROR).send({ message: 'Ошибка сервера' });
@@ -86,7 +86,7 @@ const deleteLike = (req, res) => {
       }
     })
     .catch(({ name }) => {
-      if (name === 'ValidationError') {
+      if (name === 'CastError') {
         res.status(INCORRECT_DATA).send({ message: 'Некорректные данные' });
       } else {
         res.status(DEFAULT_ERROR).send({ message: 'Ошибка сервера' });
