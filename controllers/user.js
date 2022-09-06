@@ -3,6 +3,7 @@ const {
   DEFAULT_ERROR,
   NOT_FOUND,
   INCORRECT_DATA,
+  CREATED_CODE,
 } = require('../errors/errors_code');
 
 const getUsers = (req, res) => {
@@ -39,8 +40,8 @@ const createUser = (req, res) => {
   const { name, about, avatar } = req.body;
 
   User.create({ name, about, avatar })
-    .then((user) => {
-      res.send(user);
+    .then(() => {
+      res.status(CREATED_CODE).send({ massage: 'Пользователь создан' });
     })
     .catch(({ name: err }) => {
       if (err === 'ValidationError') {
@@ -52,7 +53,7 @@ const createUser = (req, res) => {
 };
 
 const patchProfile = (req, res) => {
-  const { name = false, about = false } = req.body;
+  const { name, about } = req.body;
 
   if (name && about) {
     User.findByIdAndUpdate(
@@ -81,7 +82,7 @@ const patchProfile = (req, res) => {
 };
 
 const patchAvatar = (req, res) => {
-  const { avatar = false } = req.body;
+  const { avatar } = req.body;
 
   if (avatar) {
     User.findByIdAndUpdate(
