@@ -62,19 +62,19 @@ const patchProfile = (req, res) => {
       { new: true, runValidators: true },
     )
       .then((user) => {
-        res.send(user);
+        if (!user) {
+          return res.status(INCORRECT_DATA).send({ message: 'Некорректные данные' });
+        }
+        return res.send(user);
       })
-      // eslint-disable-next-line consistent-return
       .catch(({ name: err }) => {
+        if (err === 'DocumentNotFoundError') {
+          return res.status(NOT_FOUND).send({ message: 'пользователь не найден' });
+        }
         if (err === 'ValidationError') {
           return res.status(INCORRECT_DATA).send({ message: 'Некорректные данные' });
         }
-        if (err === 'NotFoundError') {
-          res
-            .status(NOT_FOUND)
-            .send({ message: 'Запрашиваемый пользователь не найден' });
-        }
-        res.status(DEFAULT_ERROR).send({ message: 'Ошибка сервера' });
+        return res.status(DEFAULT_ERROR).send({ message: 'Ошибка сервера' });
       });
   } else {
     res.status(INCORRECT_DATA).send({ message: 'Некорректные данные' });
@@ -91,24 +91,22 @@ const patchAvatar = (req, res) => {
       { new: true, runValidators: true },
     )
       .then((user) => {
-        res.send(user);
+        if (!user) {
+          return res.status(INCORRECT_DATA).send({ message: 'Некорректные данные' });
+        }
+        return res.send(user);
       })
-      // eslint-disable-next-line consistent-return
       .catch(({ name: err }) => {
+        if (err === 'DocumentNotFoundError') {
+          return res.status(NOT_FOUND).send({ message: 'Пользователь не найден' });
+        }
         if (err === 'ValidationError') {
           return res.status(INCORRECT_DATA).send({ message: 'Некорректные данные' });
         }
-        if (err === 'NotFoundError') {
-          res
-            .status(NOT_FOUND)
-            .send({ message: 'Запрашиваемый пользователь не найден' });
-        } else {
-          res.status(DEFAULT_ERROR).send({ message: 'Ошибка сервера' });
-        }
+        return res.status(DEFAULT_ERROR).send({ message: 'Ошибка сервера' });
       });
   } else {
-    // eslint-disable-next-line no-undef
-    res.status(DATA_ERROR_CODE).send({ message: 'Некорректные данные' });
+    res.status(INCORRECT_DATA).send({ message: 'Некорректные данные' });
   }
 };
 
