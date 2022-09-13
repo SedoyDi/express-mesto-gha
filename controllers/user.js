@@ -63,13 +63,13 @@ const patchProfile = (req, res) => {
     )
       .then((user) => {
         if (!user) {
-          return res.status(INCORRECT_DATA).send({ message: 'Некорректные данные' });
+          return res.status(NOT_FOUND).send({ message: 'пользователь не найден' });
         }
         return res.send(user);
       })
       .catch(({ name: err }) => {
-        if (err === 'DocumentNotFoundError') {
-          return res.status(NOT_FOUND).send({ message: 'пользователь не найден' });
+        if (err === 'CastError') {
+          return res.status(INCORRECT_DATA).send({ message: 'Некорректные данные' });
         }
         if (err === 'ValidationError') {
           return res.status(INCORRECT_DATA).send({ message: 'Некорректные данные' });
@@ -92,13 +92,13 @@ const patchAvatar = (req, res) => {
     )
       .then((user) => {
         if (!user) {
-          return res.status(INCORRECT_DATA).send({ message: 'Некорректные данные' });
+          return res.status(NOT_FOUND).send({ message: 'Пользователь не найден' });
         }
         return res.send(user);
       })
       .catch(({ name: err }) => {
-        if (err === 'DocumentNotFoundError') {
-          return res.status(NOT_FOUND).send({ message: 'Пользователь не найден' });
+        if (err === 'CastError') {
+          return res.status(INCORRECT_DATA).send({ message: 'Некорректные данные' });
         }
         if (err === 'ValidationError') {
           return res.status(INCORRECT_DATA).send({ message: 'Некорректные данные' });
