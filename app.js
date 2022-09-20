@@ -2,9 +2,8 @@ const express = require('express');
 
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
-const userRoutes = require('./routes/user');
-const cardRoutes = require('./routes/card');
 const { NOT_FOUND } = require('./status/status_code');
+const { login, createUser } = require('./controllers/user');
 require('dotenv').config();
 
 const { PORT = 3000 } = process.env;
@@ -19,9 +18,11 @@ app.use((req, res, next) => {
   };
   next();
 });
+app.post('/signin', login);
+app.post('/signup', createUser);
 
-app.use('/users', userRoutes);
-app.use('/cards', cardRoutes);
+app.use('/users', require('./routes/user'));
+app.use('/cards', require('./routes/card'));
 
 app.use('/*', (req, res) => {
   res.status(NOT_FOUND).send({
