@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const { NOT_FOUND } = require('./status/status_code');
 const { login, createUser } = require('./controllers/user');
+const auth = require('./middlewares/auth');
 require('dotenv').config();
 
 const { PORT = 3000 } = process.env;
@@ -20,7 +21,7 @@ app.use((req, res, next) => {
 });
 app.post('/signin', login);
 app.post('/signup', createUser);
-
+app.use(auth);
 app.use('/users', require('./routes/user'));
 app.use('/cards', require('./routes/card'));
 
