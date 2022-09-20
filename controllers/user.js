@@ -28,6 +28,27 @@ const login = (req, res, next) => {
     .catch(next);
 };
 
+const getUser = (req, res) => {
+  const { _id } = req.user;
+  User.find(_id)
+    .then((user) => {
+      if (user) {
+        res.send(user);
+      } else {
+        res
+          .status(NOT_FOUND)
+          .send({ message: 'Запрашиваемый пользователь не найден' });
+      }
+    })
+    .catch(({ name }) => {
+      if (name === 'CastError') {
+        res.status(INCORRECT_DATA).send({ message: 'Некорректные данные' });
+      } else {
+        res.status(DEFAULT_ERROR).send({ message: 'Ошибка сервера' });
+      }
+    });
+};
+
 const getUsers = (req, res) => {
   User.find({})
     .then((users) => {
@@ -140,6 +161,7 @@ const patchAvatar = (req, res) => {
 
 module.exports = {
   login,
+  getUser,
   getUsers,
   getUserById,
   createUser,
