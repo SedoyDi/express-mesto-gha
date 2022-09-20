@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const userRoutes = require('./routes/user');
 const cardRoutes = require('./routes/card');
 const { NOT_FOUND } = require('./status/status_code');
+require('dotenv').config();
 
 const { PORT = 3000 } = process.env;
 
