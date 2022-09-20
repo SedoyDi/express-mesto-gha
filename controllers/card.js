@@ -18,20 +18,32 @@ const getCards = (req, res) => {
 };
 
 const deleteCard = (req, res) => {
-  Card.findByIdAndRemove(req.params.cardId)
-    .then((card) => {
-      if (card) {
+  const removeCard = () => {
+    Card.remove(req.params.cardId)
+      .then((card) => {
         res.send(card);
-      } else {
+      })
+      .catch(({ name }) => {
+        if (name === 'CastError') {
+          res.status(INCORRECT_DATA).send({ message: 'Некорректные данные' });
+        } else {
+          res.status(DEFAULT_ERROR).send({ message: 'Ошибка сервера' });
+        }
+      });
+  };
+
+  Card.findById(req.params.cardId)
+    .then((card) => {
+      if (!card) {
         res.status(NOT_FOUND).send({ message: 'Карточка не найдена' });
+      } else if (req.user._id === !card.owner.toString()) {
+        res.status(403).send({ message: 'Ошибка доступа. Действие не возможно' });
+      } else {
+        removeCard();
       }
     })
-    .catch(({ name }) => {
-      if (name === 'CastError') {
-        res.status(INCORRECT_DATA).send({ message: 'Некорректные данные' });
-      } else {
-        res.status(DEFAULT_ERROR).send({ message: 'Ошибка сервера' });
-      }
+    .catch(() => {
+      res.status(DEFAULT_ERROR).send({ message: 'Ошибка сервера' });
     });
 };
 

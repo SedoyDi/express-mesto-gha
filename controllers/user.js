@@ -22,6 +22,7 @@ const login = (req, res, next) => {
       res.cookie('jwt', token, {
         maxAge: 3600000,
         httpOnly: true,
+        sameSite: true,
       });
       res.send({ token });
     })
@@ -30,7 +31,7 @@ const login = (req, res, next) => {
 
 const getUser = (req, res) => {
   const { _id } = req.user;
-  User.find(_id)
+  User.find({ _id })
     .then((user) => {
       if (user) {
         res.send(user);

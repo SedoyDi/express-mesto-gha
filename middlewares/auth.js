@@ -8,16 +8,16 @@ const handlerAuthError = (res) => {
 };
 
 module.exports = (req, res, next) => {
-  const { authorization } = req.headers;
+  const cookieAuth = req.cookies.jwt;
 
-  if (!authorization) {
+  if (!cookieAuth) {
     return handlerAuthError(res);
   }
 
   let payload;
 
   try {
-    payload = jwt.verify(authorization, JWT_SECRET);
+    payload = jwt.verify(cookieAuth, JWT_SECRET);
   } catch (err) {
     return handlerAuthError(res);
   }
