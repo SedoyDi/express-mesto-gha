@@ -87,7 +87,7 @@ const patchProfile = (req, res, next) => {
       if (!user) {
         throw new NotFoundError('Пользователь не найден');
       }
-      res.status(200).send({ data: user });
+      res.status(200).send({ name, about });
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
@@ -108,7 +108,7 @@ const patchAvatar = (req, res, next) => {
       if (!user) {
         throw new NotFoundError('Пользователь не найден');
       }
-      res.status(200).send({ data: user });
+      res.status(200).send({ avatar });
     })
     .catch((err) => {
       if (err.name === 'ValidationError' || err.name === 'CastError') {
