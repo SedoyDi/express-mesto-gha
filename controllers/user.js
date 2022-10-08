@@ -51,12 +51,6 @@ const getUserById = (req, res, next) => {
 };
 
 const createUser = (req, res, next) => {
-  User.find({})
-    .then((users) => res.status(200).send({ users }))
-    .catch(next);
-};
-
-module.exports.createUser = (req, res, next) => {
   const {
     name,
     about,
