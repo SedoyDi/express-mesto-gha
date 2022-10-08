@@ -22,14 +22,14 @@ const getUser = (req, res, next) => {
       if (!user) {
         throw new NotFoundError('Пользователь не найден');
       }
-      res.status(200).send({ data: user });
+      res.status(200).send({ user });
     })
     .catch(next);
 };
 
 const getUsers = (req, res, next) => {
   User.find({})
-    .then((users) => res.status(200).send({ data: users }))
+    .then((users) => res.status(200).send({ users }))
     .catch(next);
 };
 
@@ -56,6 +56,7 @@ const createUser = (req, res, next) => {
     about,
     avatar,
     email,
+    password,
   } = req.body;
   bcrypt.hash(req.body.password, 10)
     .then((hash) => User.create({
@@ -68,7 +69,7 @@ const createUser = (req, res, next) => {
     .then(() => {
       res.status(200).send({
         data: {
-          name, about, avatar, email,
+          name, about, avatar, email, password,
         },
       });
     })
@@ -93,7 +94,7 @@ const patchProfile = (req, res, next) => {
       if (!user) {
         throw new NotFoundError('Пользователь не найден');
       }
-      res.status(200).send({ data: user });
+      res.status(200).send({ user });
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
@@ -114,7 +115,7 @@ const patchAvatar = (req, res, next) => {
       if (!user) {
         throw new NotFoundError('Пользователь не найден');
       }
-      res.status(200).send({ data: user });
+      res.status(200).send({ user });
     })
     .catch((err) => {
       if (err.name === 'ValidationError' || err.name === 'CastError') {
