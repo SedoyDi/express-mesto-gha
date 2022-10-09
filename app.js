@@ -4,6 +4,7 @@ const { errors } = require('celebrate');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const { login, createUser } = require('./controllers/user');
+const { validateAuthorization, validateRegistration } = require('./middlewares/validation');
 const auth = require('./middlewares/auth');
 const NotFoundError = require('./errors/notFoudError');
 
@@ -24,8 +25,8 @@ app.use((req, res, next) => {
   next();
 });
 
-app.post('/signin', login);
-app.post('/signup', createUser);
+app.post('/signin', validateAuthorization, login);
+app.post('/signup', validateRegistration, createUser);
 app.use(auth);
 app.use('/users', require('./routes/user'));
 app.use('/cards', require('./routes/card'));
