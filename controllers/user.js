@@ -22,14 +22,14 @@ const getUser = (req, res, next) => {
       if (!user) {
         throw new NotFoundError('Пользователь не найден');
       }
-      res.status(200).send(user);
+      res.send(user);
     })
     .catch(next);
 };
 
 const getUsers = (req, res, next) => {
   User.find({})
-    .then((users) => res.status(200).send(users))
+    .then((users) => res.send(users))
     .catch(next);
 };
 
@@ -43,7 +43,7 @@ const getUserById = (req, res, next) => {
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        next(new IncorrectReqvestError(`Некорректные данные: ${err.message}`));
+        next(new IncorrectReqvestError('Некорректные данные'));
       } else {
         next(err);
       }
@@ -64,11 +64,11 @@ const createUser = (req, res, next) => {
       name, about, avatar, email, password: hash,
     }))
     .then((user) => {
-      res.status(200).send(user);
+      res.send(user);
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        next(new IncorrectReqvestError(`Некорректные данные: ${err.message}`));
+        next(new IncorrectReqvestError('Некорректные данные'));
       } if (err.code === 11000) {
         next(new ConflictError('Пользователь с таким email уже зарегистрирован'));
       } else {
@@ -87,11 +87,11 @@ const patchProfile = (req, res, next) => {
       if (!user) {
         throw new NotFoundError('Пользователь не найден');
       }
-      res.status(200).send({ name, about });
+      res.send({ name, about });
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        next(new IncorrectReqvestError(`Некорректные данные: ${err.message}`));
+        next(new IncorrectReqvestError('Некорректные данные'));
       } else {
         next(err);
       }
@@ -108,11 +108,11 @@ const patchAvatar = (req, res, next) => {
       if (!user) {
         throw new NotFoundError('Пользователь не найден');
       }
-      res.status(200).send({ avatar });
+      res.send({ avatar });
     })
     .catch((err) => {
       if (err.name === 'ValidationError' || err.name === 'CastError') {
-        throw new IncorrectReqvestError(`Некорректные данные: ${err.message}`);
+        next(new IncorrectReqvestError('Некорректные данные'));
       } else {
         next(err);
       }

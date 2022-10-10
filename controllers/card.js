@@ -6,7 +6,7 @@ const AccessError = require('../errors/accessError');
 
 const getCards = (req, res, next) => {
   Card.find({})
-    .then((cards) => res.status(200).send({ data: cards }))
+    .then((cards) => res.send({ data: cards }))
     .catch(next);
 };
 
@@ -19,7 +19,7 @@ const createCard = (req, res, next) => {
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        next(new IncorrectReqvestError(`Некорректные данные: ${err.message}`));
+        next(new IncorrectReqvestError('Некорректные данные'));
       } else {
         next(err);
       }
@@ -27,16 +27,16 @@ const createCard = (req, res, next) => {
 };
 
 const deleteCard = (req, res, next) => {
-  Card.findByIdAndRemove(req.params.cardId)
+  Card.findById(req.params.cardId)
     .then((card) => {
       if (!card) {
-        throw new NotFoundError('Карточка не найдена');
+        throw new NotFoundError('Карточка с указанным id не найдена');
       }
-      if (card.owner.toString() === req.user._id) {
-        res.status(200).send({ card });
-      } else {
-        throw new AccessError('Удаление чужой карточки невозможно');
+      if (card.owner._id.toString() !== req.user._id.toString()) {
+        throw new AccessError('Вы не можете удалить чужую карточку');
       }
+      card.remove();
+      res.send({ data: card, message: 'Карточка успешно удалена' });
     })
     .catch(next);
 };
@@ -51,11 +51,11 @@ const addLike = (req, res, next) => {
       if (!card) {
         throw new NotFoundError('Карточка не найдена');
       }
-      res.status(200).send({ data: card });
+      res.send({ data: card });
     })
     .catch((err) => {
       if (err.name === 'CastError' || err.name === 'ValidationError') {
-        next(new IncorrectReqvestError(`Некорректные данные: ${err.message}`));
+        next(new IncorrectReqvestError('Некорректные данные'));
       } else {
         next(err);
       }
@@ -72,11 +72,11 @@ const deleteLike = (req, res, next) => {
       if (!card) {
         throw new NotFoundError('Карточка не найдена');
       }
-      res.status(200).send({ data: card });
+      res.send({ data: card });
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        next(new IncorrectReqvestError(`Некорректные данные: ${err.message}`));
+        next(new IncorrectReqvestError('Некорректные данные'));
       } else {
         next(err);
       }
