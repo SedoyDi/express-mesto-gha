@@ -35,7 +35,9 @@ const deleteCard = (req, res, next) => {
       if (card.owner._id.toString() !== req.user._id.toString()) {
         throw new AccessError('Вы не можете удалить чужую карточку');
       }
-      card.remove();
+      return card.remove();
+    })
+    .then((card) => {
       res.send({ data: card, message: 'Карточка успешно удалена' });
     })
     .catch(next);
